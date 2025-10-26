@@ -17,7 +17,7 @@
 function [a] = compute_eigenvalues(sigma_values, alpha, is_harmonic, k, N, omega, nu, mu, rho, g, gamma, h)
   num_sigma_values = length(sigma_values);
   An_block = cell(N + 1, 1);
-  a = nan(num_sigma_values, 12);
+  a = nan(num_sigma_values, 13);
 
   % Sweep over temporal frequencies
   for ii = 1:num_sigma_values
@@ -43,15 +43,16 @@ function [a] = compute_eigenvalues(sigma_values, alpha, is_harmonic, k, N, omega
     % - Real parts that are positive and less than 2*g
     evals = evals(isinf(evals) == false);
     evals = evals(abs(imag(evals)) < 1e-12);
-    evals = evals(abs(real(evals)) < 150);
+    evals = evals(abs(real(evals)) < 5.0);
 
     % Sort the remaining eigenvalues in ascending order
     evals = sort(evals(evals > 0));
 
     nevals = length(evals);
     a(ii,1) = k;
-    a(ii,2) = sigma;
-    a(ii,3:2+min(nevals,10)) = evals(1:min(nevals,10));
+    a(ii,2) = omega;
+    a(ii,3) = sigma;
+    a(ii,4:3+min(nevals,10)) = evals(1:min(nevals,10));
   end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
